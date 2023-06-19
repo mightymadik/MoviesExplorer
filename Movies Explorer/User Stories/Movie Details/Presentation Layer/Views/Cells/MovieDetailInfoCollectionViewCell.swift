@@ -39,11 +39,46 @@ class MovieDetailInfoCollectionViewCell: UICollectionViewCell {
     private var popularityLabel: UILabel!
     
     func configure(movieDetail: MovieDetailModel) {
-        releaseDateLabel.text = "2023"
-        durationLabel.text = "1h 20m"
-        voteLabel.text = "Vote: 8.3"
-        popularityLabel.text = "Popularity: 8320"
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        if let releaseDate = dateFormatter.date(from: movieDetail.releaseDate) {
+            let year = Calendar.current.component(.year, from: releaseDate)
+            releaseDateLabel.text = "\(year)"
+        } else {
+            releaseDateLabel.text = "N/A"
+        }
+        
+        let durationInMinutes = movieDetail.duration
+            
+            let hours = durationInMinutes / 60
+            let minutes = durationInMinutes % 60
+            
+            let durationText: String
+            if hours > 0 {
+                durationText = "\(hours)h \(minutes)m"
+            } else {
+                durationText = "\(minutes)m"
+            }
+            
+            durationLabel.text = durationText
+        
+        if let voteAverage = movieDetail.voteAverage {
+            voteLabel.text = "Vote: \(voteAverage)"
+        } else {
+            voteLabel.text = "Vote: N/A"
+        }
+        
+        if let popularity = movieDetail.popularity {
+            popularityLabel.text = "Popularity: \(popularity)"
+        } else {
+            popularityLabel.text = "Popularity: N/A"
+        }
+        
+        // Additional configuration code for other UI elements
     }
+
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)
